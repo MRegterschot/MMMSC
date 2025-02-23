@@ -244,7 +244,7 @@ export default class Tmx extends Plugin {
         if (tmc.game.Name === "TmForever") {
             url += `api/tracks?packid=${packId}&fields=TrackId,TrackName`;
         } else if (tmc.game.Name === "ManiaPlanet" || tmc.game.Name === "Trackmania") {
-            url += `api/mappack/get_mappack_tracks/${packId}`;
+            url += `api/maps?mappackid=${packId}`;
         } else {
             tmc.chat(`¤error¤Game ${tmc.game.Name} is not supported for this command.`);
             return;
