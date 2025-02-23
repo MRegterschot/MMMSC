@@ -36,7 +36,7 @@ export default class Tmx extends Plugin {
     }
 
     getDownloadEndpoint() {
-        return tmc.game.Name === "TmForever" ? "trackgbx/" : "maps/download/";
+        return tmc.game.Name === "TmForever" ? "trackgbx/" : "mapgbx/";
     }
 
     async onLoad() {
@@ -244,7 +244,7 @@ export default class Tmx extends Plugin {
         if (tmc.game.Name === "TmForever") {
             url += `api/tracks?packid=${packId}&fields=TrackId,TrackName`;
         } else if (tmc.game.Name === "ManiaPlanet" || tmc.game.Name === "Trackmania") {
-            url += `api/maps?fields=Mappack.MappackId&mappackid=${packId}`;
+            url += `api/maps?fields=MapId%2CGbxMapName&mappackid=${packId}`;
         } else {
             tmc.chat(`¤error¤Game ${tmc.game.Name} is not supported for this command.`);
             return;
