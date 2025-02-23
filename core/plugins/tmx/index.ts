@@ -244,7 +244,7 @@ export default class Tmx extends Plugin {
         if (tmc.game.Name === "TmForever") {
             url += `api/tracks?packid=${packId}&fields=TrackId,TrackName`;
         } else if (tmc.game.Name === "ManiaPlanet" || tmc.game.Name === "Trackmania") {
-            url += `api/maps?mappackid=${packId}`;
+            url += `api/maps?fields=Mappack.MappackId&mappackid=${packId}`;
         } else {
             tmc.chat(`¤error¤Game ${tmc.game.Name} is not supported for this command.`);
             return;
@@ -256,8 +256,7 @@ export default class Tmx extends Plugin {
         if (!json) {
             tmc.chat(`¤error¤Error while adding Pack ID ${packId}: ${res.statusText}`, login);
         }
-        let results = json;
-        if (tmc.game.Name === "TmForever") results = json.Results;
+        let results = json.Results;
         for (let data of results) {
             if (this.cancelToken === true) return;
             try {
