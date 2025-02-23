@@ -262,7 +262,7 @@ export default class Tmx extends Plugin {
             if (this.cancelToken === true) return;
             try {
                 let mapName = tmc.game.Name === "TmForever" ? data.TrackName : data.GbxMapName;
-                let id = tmc.game.Name === "TmForever" ? data.TrackId : data.TrackID;
+                let id = tmc.game.Name === "TmForever" ? data.TrackId : data.MapId;
                 tmc.chat(`Downloading: ¤white¤${mapName}`);
                 const map: Map = { id, baseUrl, site };
                 await this.downloadMap(map, login);
