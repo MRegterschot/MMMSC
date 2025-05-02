@@ -49,13 +49,6 @@ export default class SettingsManager {
         this.colors['button_bg_dark'] = modLightness(this.colors['button_bg'], -15);
         this.colors['window_bg_light'] = modLightness(this.colors['window_bg'], 5);
         this.colors['window_bg_dark'] = modLightness(this.colors['window_bg'], -5);
-        this.adminsFile = '/../userdata/admins_' + tmc.server.login + '.json';
-        this.colorsFile = '/../userdata/colors_' + tmc.server.login + '.json';
-        this.settingsFile = '/../userdata/settings_' + tmc.server.login + '.json';
-
-        this.init(this.adminsFile, []);
-        this.init(this.colorsFile, {});
-        this.init(this.settingsFile, {});
 
         try {
             const admins = JSON.parse(readFileSync(import.meta.dirname + this.adminsFile, 'utf-8')) || [];
