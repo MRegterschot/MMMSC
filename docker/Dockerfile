@@ -1,5 +1,5 @@
 # Using bun base image + node because of https://github.com/oven-sh/bun/issues/7343
-FROM node:20-alpine
+FROM node:21-alpine
 
 ARG UID="9999" \
     GID="9999" \
