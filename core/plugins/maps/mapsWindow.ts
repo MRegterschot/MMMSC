@@ -53,6 +53,7 @@ export default class MapsWindow extends ListWindow {
             }
         }
         this.setItems(maps);
+        super.uiPaginate(login, answer, entries);
     }
 
     async onPageItemsUpdate(items: any) {
