@@ -69,9 +69,6 @@ class log {
     ansiLevel: number = 0;
     constructor() {
         this.ansiLevel = Number.parseInt(process.env.ANSILEVEL || "0");
-
-        console.log(e.message);
-        process.exit(1);
     }
 
     debug(str: string) {
