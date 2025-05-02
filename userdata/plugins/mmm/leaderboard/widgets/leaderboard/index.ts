@@ -1,7 +1,7 @@
 import type { Player } from "../../../../../../core/playermanager";
 import Plugin from "../../../../../../core/plugins";
 import Widget from "../../../../../../core/ui/widget";
-import { escape } from "../../../../../../core/utils";
+import { htmlEntities } from "../../../../../../core/utils";
 
 export default class MMMWidget extends Plugin {
     static depends: string[] = ["mmm/leaderboard"];
@@ -108,7 +108,7 @@ export default class MMMWidget extends Plugin {
         }
 
         for (const rank of outLeaderboard) {
-            rank.nickname = escape(rank.player?.nickname ?? (await tmc.getPlayer(rank.login)).nickname);
+            rank.nickname = htmlEntities(rank.player?.nickname ?? (await tmc.getPlayer(rank.login)).nickname);
         }
 
         widget.setData({ ...widget.data, leaderboard: outLeaderboard });

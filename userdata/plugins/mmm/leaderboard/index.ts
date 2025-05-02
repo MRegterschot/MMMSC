@@ -3,7 +3,7 @@ import MMMPoints from "../../../schemas/mmmpoints.model";
 import MMMRank from "../../../schemas/mmmrank.model";
 import PointsWindow from "./pointsWindow";
 import LeaderboardWindow from "./leaderboardWindow";
-import { clone, escape, formatTime } from "../../../../core/utils";
+import { clone, htmlEntities, formatTime } from "../../../../core/utils";
 import Player from "../../../../core/schemas/players.model";
 import RanksWindow from "./ranksWindow";
 import PointsHistory from "../../../schemas/pointshistory.model";
@@ -198,7 +198,7 @@ export default class Leaderboard extends Plugin {
                     formattedTime: formatTime(mmmScore.score.time),
                     points: mmmScore.mmmScore.points,
                     rank: mmmScore.mmmScore.rank,
-                    nickname: escape(name),
+                    nickname: htmlEntities(name),
                 });
             }
 
@@ -271,12 +271,12 @@ export default class Leaderboard extends Plugin {
             ],
         });
 
-        let rankList = [];
+        let rankList: { rank: number | null; nickname: string; login: string | undefined; points: number }[] = [];
         for (const rank of ranks) {
             rankList.push({
                 rank: rank.rank,
                 // @ts-expect-error
-                nickname: escape(rank.player?.nickname ?? (await tmc.players.getPlayer(rank.login))?.nickname ?? ""),
+                nickname: htmlEntities(rank.player?.nickname ?? (await tmc.players.getPlayer(rank.login))?.nickname ?? ""),
                 login: rank.login,
                 points: rank.totalPoints,
             });
@@ -309,7 +309,7 @@ export default class Leaderboard extends Plugin {
             ],
         });
 
-        let pointsList = [];
+        let pointsList: { nickname: string; login: string | undefined; points: number; rank: number | null; time: string }[] = [];
 
         for (const point of points) {
             pointsList.push({
@@ -342,7 +342,7 @@ export default class Leaderboard extends Plugin {
             return;
         }
 
-        if (!tmc.settingsMgr.isMasterAdmin(login)) {
+        if (!tmc.settings.isMasterAdmin(login)) {
             tmc.chat("You don't have permission to use this command!");
             return;
         }
@@ -363,7 +363,7 @@ export default class Leaderboard extends Plugin {
     }
 
     async cmdRemoveMapAndPoints(login: string, args: string[]) {
-        if (!tmc.settingsMgr.isMasterAdmin(login)) {
+        if (!tmc.settings.isMasterAdmin(login)) {
             tmc.chat("You don't have permission to use this command!");
             return;
         }
@@ -436,7 +436,7 @@ export default class Leaderboard extends Plugin {
         try {
             let maps = await tmc.server.call("GetMapList", -1, 0);
             maps = maps.sort(() => Math.random() - 0.5);
-            let toserver = [];
+            let toserver: string[] = [];
             for (const map of maps) {
                 toserver.push(map.FileName);
             }
@@ -499,7 +499,7 @@ export default class Leaderboard extends Plugin {
                 formattedTime: formatTime(record.time),
                 points: record.points,
                 rank: record.rank,
-                nickname: escape(name),
+                nickname: htmlEntities(name),
             });
         }
 

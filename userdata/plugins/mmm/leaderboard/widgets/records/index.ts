@@ -1,8 +1,6 @@
 import type { Player } from "../../../../../../core/playermanager";
 import Plugin from "../../../../../../core/plugins";
 import Widget from "../../../../../../core/ui/widget";
-import { escape, formatTime } from "../../../../../../core/utils";
-import MMMPoints from "../../../../../schemas/mmmpoints.model";
 
 export default class MMMRecordsWidget extends Plugin {
     static depends: string[] = ["mmm/leaderboard"];
@@ -69,10 +67,10 @@ export default class MMMRecordsWidget extends Plugin {
 
     async toggleWidget(login: string, value: number) {
         if (value > 0) {
-            this.widgets[login].pos = { x: 105, y: 30 };
+            this.widgets[login].pos = { x: 105, y: 30, z: 10 };
             this.widgets[login].setData({ ...this.widgets[login].data, open: true });
         } else {
-            this.widgets[login].pos = { x: 160, y: 30 };
+            this.widgets[login].pos = { x: 160, y: 30, z: 10 };
             this.widgets[login].setData({ ...this.widgets[login].data, open: false });
         }
 
@@ -85,7 +83,7 @@ export default class MMMRecordsWidget extends Plugin {
             widget = new Widget("userdata/plugins/mmm/leaderboard/widgets/records/widget.twig");
             widget.title = "Records";
             widget.recipient = login;
-            widget.pos = { x: 105, y: 30 };
+            widget.pos = { x: 105, y: 30, z: 10 };
             widget.size = { width: 55, height: 45 };
             widget.setOpenAction(this.widgetClick.bind(this));
             widget.actions['open'] = tmc.ui.addAction(this.toggleWidget.bind(this), 1);

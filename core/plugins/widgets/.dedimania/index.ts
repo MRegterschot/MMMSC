@@ -2,7 +2,7 @@ import type { Player } from '@core/playermanager';
 import Plugin from '@core/plugins';
 import type { DediRecord } from '@core/plugins/tmnf/dedimania';
 import Widget from '@core/ui/widget';
-import { formatTime, escape, removeColors } from '@core/utils';
+import { formatTime, htmlEntities, removeColors } from '@core/utils';
 
 
 export default class DedimaniaWidget extends Plugin {
@@ -86,7 +86,7 @@ export default class DedimaniaWidget extends Plugin {
 
         for (const rec of outRecords) {
             rec.formattedTime = formatTime(rec.Best);
-            rec.nickname = escape(rec.NickName);
+            rec.nickname = htmlEntities(rec.NickName);
         }
 
         widget.setData({ records: outRecords });

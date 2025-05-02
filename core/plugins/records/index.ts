@@ -111,7 +111,6 @@ export default class Records extends Plugin {
     async deleteRecord(login: string, data: any) {
         if (!tmc.admins.includes(login)) return;
         const msg = `¤info¤Deleting map record for ¤white¤${data.nickname} ¤info¤(¤white¤${data.login}¤info¤)`;
-        const msg = `¤info¤Deleting map record for ¤white¤${data.nickname} ¤info¤(¤white¤${data.login}¤info¤)`;
         tmc.cli(msg);
         tmc.chat(msg, login);
         try {
@@ -123,8 +122,6 @@ export default class Records extends Plugin {
                     },
                 },
             });
-
-            this.records = this.records.filter((r) => r.login !== data.login);
 
             this.records = this.records.filter((r) => r.login !== data.login);
 
@@ -140,7 +137,6 @@ export default class Records extends Plugin {
             });
             await this.cmdRecords(login, []);
         } catch (err: any) {
-            const msg = `Error deleting record: ${err.message}`;
             const msg = `Error deleting record: ${err.message}`;
             tmc.cli(msg);
             tmc.chat(msg, login);

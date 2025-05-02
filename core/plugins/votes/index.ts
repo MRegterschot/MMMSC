@@ -132,7 +132,7 @@ export default class VotesPlugin extends Plugin {
                 action: "/extend"
             });
         }
-    }
+    } */
 
     async onPlayerConnect(player: Player) {
         const login = player.login;
@@ -147,7 +147,7 @@ export default class VotesPlugin extends Plugin {
         if (this.widgets[login]) {
             delete this.widgets[login];
         }
-    } */
+    }
 
     async onEndMatch() {
         this.currentVote = null;

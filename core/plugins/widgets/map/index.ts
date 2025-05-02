@@ -94,6 +94,7 @@ export default class MapWidget extends Plugin {
             wrHolder: htmlEntities(data.wrHolder || 'n/a'),
             tmx: this.getTmxLogo(),
             tmxUrl: tmxUrl,
+            data: data,
             info: data.Style ? data.Style + ' $fff/ ' + data.Difficulty : 'No TMX info'
         });
 

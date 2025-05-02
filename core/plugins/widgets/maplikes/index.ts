@@ -62,7 +62,7 @@ export default class MapLikesWidget extends Plugin {
         let widget = this.widgets[login];
         
         if (!widget) {
-            widget = new Widget("core/plugins/widgets/maplikes/widget.twig");      
+            widget = new Widget("core/plugins/widgets/maplikes/widget.xml.twig");      
             widget.pos = { x: 115, y: 60, z: 10 };   
             widget.recipient = login;
             widget.actions['like'] = tmc.ui.addAction(this.actionLike.bind(this), 1);

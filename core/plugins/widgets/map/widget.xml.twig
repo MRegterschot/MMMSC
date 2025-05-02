@@ -10,4 +10,7 @@
     <quad pos="1 -16" z-index="2" size="{{data.tmx.size}}" image="{{ data.tmx.url }}" halign="left" valign="center" keepratio="Fit" url="{{ data.tmxUrl }}"/>
     <label pos="{{ size.width -1 }} -16" z-index="2" size="10 4" text="${{colors.widget_text}}{{ data.wrTime }}" halign="right" valign="center2" textcolor="fff" textfont="RobotoCondensed" textsize="1" />
 
+    {% if data.data %}
+        <label pos="{{ size.width - 1 }} -20" z-index="1" size="{{size.width - 2 }} 5" focusareacolor1="0000" focusareacolor2="0005" text="Award the map! $FB0🏆$z {{ data.data.AwardCount|default(0) }}" halign="right" valign="center2" textfont="RobotoCondensed" textsize="1" url="https://trackmania.exchange/maps/{{ data.data.TrackID }}" />
+    {% endif %}
 {% endblock %}

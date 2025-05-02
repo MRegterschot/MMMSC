@@ -503,7 +503,7 @@ class MiniControl {
         this.cli(msg);
         this.startComplete = true;
         setMemStart();
-        if (gc) gc();
+        // if (gc) gc();
         for (const plugin of Object.values(this.plugins)) {
             await plugin?.onStart();
         }
