@@ -69,9 +69,9 @@ class log {
     ansiLevel: number = 0;
     constructor() {
         this.ansiLevel = Number.parseInt(process.env.ANSILEVEL || "0");
-        const path = `${process.cwd()}/userdata/log/`;
+        // const path = `${process.cwd()}/userdata/log/`;
         try {
-            if (!existsSync(path)) mkdirSync(path);
+            // if (!existsSync(path)) mkdirSync(path);
         } catch (e:any) {
             console.log(e.message);
             process.exit(1);
@@ -98,6 +98,7 @@ class log {
     }
 
     writeLog(message:string) {
+        return;
         if (process.env.WRITELOG?.toLowerCase() == "true") {
             const date = new Date();
             const file = `${date.getUTCFullYear()}-${date.getUTCMonth()+1}-${date.getUTCDate()}_console.log`;
