@@ -2,8 +2,8 @@
 
 {% block content %}
     {% for item in data.items.items %}
-        {% set posy = ((loop.index0 % 5) * 11.5) + 11 %}
-        {% set posx = (loop.index0 // 5) * 46.5 %}
+        {% set posx = (loop.index0 % 4) * 46 %}
+        {% set posy = ((loop.index0 // 4) * 11.5) + 11 %}
         <frame pos="{{ posx }} -{{ posy }}" z-index="1">
             <label pos="0 -2.5" z-index="2" size="45 5" textfont="RobotoCondensed" text="${{colors.window_text}}{{ item['Index'] }}. {{ item['Name'] }}" halign="left" textsize="1.25" valign="center2"/>
             <label pos="0 -5.5" z-index="2" size="45 5" textfont="RobotoCondensed" text="${{colors.window_text}}by {{ item['AuthorName'] }}" halign="left" textsize="0.95" valign="center2"/>
