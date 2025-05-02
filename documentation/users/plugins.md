@@ -12,12 +12,13 @@
 | `/serverlogin`    | shows server login |
 | `/version` | show version numbers for titlepack, server and controller |
 
-# Admin
+## Admin
+
 When loaded, Admin plugin provides simple chat-driven admin interface for server administration.
 
 ## Available commands
 
-### Available in Trackmania2020 and Maniaplanet:
+### Available in Trackmania2020 and Maniaplanet
 
 | Command             | Description |
 |:---                 |:---         |
@@ -25,6 +26,7 @@ When loaded, Admin plugin provides simple chat-driven admin interface for server
 | `//set` [setting] [value]         | Set modesetting                        |
 
 Available globally:
+
 ### Players
 
 | Command             | Description |
@@ -49,43 +51,47 @@ Available globally:
 | `//jump` [mapid] | Remove a map from the playlist, mapid is optional see /list for mapid |
 
 ### Server
+
 | Command             | Description |
 |:---                 |:---         |
 | `//cancel` | Cancel a vote |
-| `//er` | End round | 
+| `//er` | End round |
 | `//mode` [rounds,ta,team,laps,cup,stunts] | Sets gamemode (stunts not available for scripted modes) |
 | `//setpass` [password] | Sets password for the server, use syntax: "if you need spaces" |
 | `//setspecpass` [password] | Sets specator password for the server |
 | `//warmup` [nb] | Sets warmup duration |
 | `//call` [method] [parameter1] [parameter2] | Call server method |
 
-# Announces
+## Announces
+
 Shows player join and leave messages.
 
-# BestCps
+## BestCps
+
 Shows at middle-top best checkpoints time.
 
-# Chat
+## Chat
+
 Customize chat appearance.
 
-# Database
-Adds bun:sqlite database for other plugins to use.
-
-# Debugtool
+## Debugtool
 
 Shows useful memory information ingame and console for developers.
 
-# Tmnf/Dedimania
+## Tmnf/Dedimania
+
 > ℹ️ Only available with TmForever
 
 Adds Dedimania records system for the server.
+
 | Command             | Description |
 |:---                 |:---         |
 | `/dedirecords` | Shows complete list of records  |
 
-# Fun commands
+## Fun commands
 
 Adds some funny commands.
+
 | Command             | Description |
 |:---                 |:---         |
 |`/afk` | Go afk |
@@ -98,52 +104,47 @@ Adds some funny commands.
 |`/bb` | Bye |
 |`/go` | Go go go |
 |`/n1` | Nice one |
-|`/nt` | Nice time | 
+|`/nt` | Nice time |
 |`/posture` | Posture Check |
 |`/hydrate` | Hydrate Check |
 
-# Maps
-
-Provides mapslist for the server.
-
-| Command             | Description |
-|:---                 |:---         |
-|`/list` | show maplist |
-
-# MapWidget
+## MapWidget
 
 Provides a custom widget to top right edge of screen with current map info.
 
-# Players
+## Records
 
-Provides a players listing for the server
+> ⚠️ Depends on database / API credentials
 
-| Command             | Description |
-|:---                 |:---         |
-|`/players` | show playerlist |
-
-
-# Records
-> ⚠️ Depends on database
-
-Provides local records for the server
+Provides live / local world records for the server
 
 | Command             | Description |
 |:---                 |:---         |
 |`/records` | show local records |
+|`/liverankings` | show live records |
+|`/worldrecords` | show world records |
 
-# Tmnf/talimit
+## Checkpoints
+
+Shows full best checkpoint times
+
+| Command             | Description |
+|:---                 |:---         |
+|`/checkpoints` | shows best checkpoints |
+
+## Tmnf/talimit
+
 > ℹ️ Only available with TmForever
 
 Provides custom ta timelimit functions for the server, like extends.
 
-# Tmnf/ui
+## Tmnf/ui
+
 > ℹ️ Only available with TmForever
 
 Removes some parts of the UI to make more clean HUD
 
-
-# TMX
+## TMX
 
 Trackmania Exchange integration plugin.
 
@@ -164,7 +165,7 @@ Trackmania Exchange integration plugin.
 |`//add <id>` | Adds map or comma separated list of maps from TMX. |
 |`//addpack <id>` | Adds mappack from TMX. |
 
-# Votes
+## Votes
 
 Provides voting.
 
@@ -185,3 +186,6 @@ Provides voting.
 |:---                   |:---               |
 | VOTE_TIMEOUT          | defaults to 30    |
 | VOTE_RATIO            | defaults to 0.55  |
+| MAX_RECORDS           | defaults to 100  |
+| WORLD_RECORDS         | defaults to 100  |
+| UPDATE_RECORDS        | defaults to 60  |

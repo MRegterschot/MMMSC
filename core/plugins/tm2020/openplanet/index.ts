@@ -1,7 +1,7 @@
-import type { Player } from '../../../playermanager';
-import Plugin from '../../../plugins';
-import Manialink from '../../../ui/manialink';
-import { parseEntries } from '../../../utils';
+import type { Player } from '@core/playermanager';
+import Plugin from '@core/plugins';
+import Manialink from '@core/ui/manialink';
+import { parseEntries } from '@core/utils';
 
 
 export default class OpenPlanet extends Plugin {
@@ -21,7 +21,6 @@ export default class OpenPlanet extends Plugin {
                 widgets.push(this.getManialink(player.login));
             }
             await tmc.ui.displayManialinks(widgets);
-            widgets = [];
         }
     }
 
@@ -39,18 +38,8 @@ export default class OpenPlanet extends Plugin {
         widget.recipient = login;
         // widget.data['replyAction'] = this.action;
         widget.data['signature'] = process.env['FORCE_OP_MODE'];
-        widget.template = "core/plugins/tm2020/openplanet/opdetect.twig";
+        widget.template = "core/plugins/tm2020/openplanet/opdetect.xml.twig";
         return widget;
-    }
-
-    async onOpenplanetResponse(login: string, answer: string, entries: any) {
-        const res = parseEntries(entries);
-        const regex = (/^Openplanet ([\d.]+) \((\w+), ([A-Z]\w+), (\d{4}-\d{2}-\d{2})\)(?:\s(?:\[([A-Z]+)\]))*$/).exec(res.response);
-        if (regex && regex.length == 6) {
-            if (regex[5] != "REGULAR") {
-
-            }
-        }
     }
 
 }

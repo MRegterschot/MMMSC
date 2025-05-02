@@ -1,57 +1,106 @@
-import { escape, formatTime } from '../../../utils';
-import Plugin from '../../../plugins';
-import Widget from '../../../ui/widget';
-
-interface Time {
-    login: string;
-    time: number;
-}
+import { htmlEntities, formatTime } from '@core/utils';
+import Plugin from '@core/plugins';
+import Widget from '@core/ui/widget';
+import type Tmx from '@core/plugins/tmx';
 
 export default class MapWidget extends Plugin {
-    static depends: string[] = ["maps"];
-    id: string = "";
-    bestTimes: Time[] = [];
-    nbCheckpoints: number = -1;
+    static depends: string[] = ['maps'];
     widget: Widget | null = null;
+    tmxInfo: any;
 
     async onLoad() {
-        this.id = tmc.ui.uuid();
-        this.widget = new Widget("core/plugins/widgets/map/widget.twig");
-       // this.widget.title ="Map Info";
-        this.widget.pos = { x: 158, y: 88, z: 1 };
-        this.widget.size = { width: 45, height: 14 };
+        tmc.settings.register('widget.maps.fetchTmxInfo', true, null, 'Widgets: Fetch TMX info for map widget');
+
+        this.widget = new Widget('core/plugins/widgets/map/widget.xml.twig');
+        this.widget.pos = { x: 121, y: 89, z: 1 };
+        this.widget.size = { width: 38, height: 9 };
         this.widget.setOpenAction(this.buttonClick.bind(this));
-        tmc.server.addListener("Trackmania.BeginMap", this.beginMap, this);
+        tmc.server.addListener('Trackmania.BeginMap', this.beginMap, this);
         const info = tmc.maps.currentMap;
-        this.nbCheckpoints = info?.NbCheckpoints || -1;
         await this.display([info]);
     }
 
     async onUnload() {
         this.widget?.hide();
         this.widget = null;
-        tmc.server.removeListener("Trackmania.BeginMap", this.beginMap);
+        tmc.server.removeListener('Trackmania.BeginMap', this.beginMap);
     }
 
     async beginMap(data: any) {
         await this.display(data);
     }
 
+    async getTmxData() {
+        const uuid = tmc.maps.currentMap?.UId;
+        let type: undefined | string = undefined;
+        if (uuid) {
+            if (tmc.game.Name == 'TmForever' && tmc.maps.currentMap?.Environnement != 'Stadium') {
+                type = 'TMUF';
+            }
+            return await (tmc.plugins['tmx'] as Tmx).getTmxInfo(uuid, type);
+        }
+        return {};
+    }
+
+    getTmxLogo() {
+        switch (tmc.game.Name) {
+            case 'TmForever':
+                return {
+                    url: 'http://images.mania.exchange/logos/tm1x/long.png',
+                    size: '10 5'
+                };
+            case 'ManiaPlanet':
+                return {
+                    url: 'http://images.mania.exchange/logos/mx/long_sm.png',
+                    size: '22 4'
+                };
+            case 'Trackmania':
+                return {
+                    url: 'http://images.mania.exchange/logos/tmx/long_sm.png',
+                    size: '22 4'
+                };
+        }
+        return {
+            url: 'http://images.mania.exchange/logos/mx/long_w_sm.png',
+            size: '22 4'
+        };
+    }
+
     async display(data: any) {
         data = data[0];
+        if (Object.keys(tmc.plugins).includes('tmx')) {
+            if (tmc.settings.get('widget.maps.fetchTmxInfo')) {
+                this.tmxInfo = await this.getTmxData();
+                if (this.tmxInfo) {
+                    data = { ...data, ...this.tmxInfo };
+                }
+            }
+        }
 
-        const tmxData = await tmc.maps.getTmxData(data.UId);
+        let tmxUrl = '';
+        if (data.TmxId) {
+            tmxUrl = data.TmxUrl + 'mapshow/' + data.TmxId;
+            if (data.TmxId && tmc.game.Name == 'TmForever') {
+                tmxUrl = data.TmxUrl.replace('https://', 'http://') + 'trackshow/' + data.TmxId;
+            }
+        }
+
 
         this.widget?.setData({
-            author: data.AuthorNickname ? data.AuthorNickname : data.Author,
-            mapname: escape(data.Name),
+            author: htmlEntities(data.AuthorNickname ? data.AuthorNickname : data.Author),
+            mapname: htmlEntities(data.Name),
             authortime: formatTime(data.AuthorTime),
-            tmx: tmxData,
+            wrTime: formatTime(data.wrTime),
+            wrHolder: htmlEntities(data.wrHolder || 'n/a'),
+            tmx: this.getTmxLogo(),
+            tmxUrl: tmxUrl,
+            info: data.Style ? data.Style + ' $fff/ ' + data.Difficulty : 'No TMX info'
         });
+
         this.widget?.display();
     }
 
-    async buttonClick(login: string, data: any) {
-        await tmc.chatCmd.execute(login, "/list");
+    async buttonClick(login: string, _data: any) {
+        await tmc.chatCmd.execute(login, '/list');
     }
 }

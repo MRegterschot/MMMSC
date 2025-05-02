@@ -1,6 +1,6 @@
-import type { Player } from "../../../playermanager";
-import Plugin from "../../../plugins";
-import Widget from "../../../ui/widget";
+import type { Player } from "@core/playermanager";
+import Plugin from "@core/plugins";
+import Widget from "@core/ui/widget";
 
 
 export default class Checkpoints extends Plugin {
@@ -35,9 +35,9 @@ export default class Checkpoints extends Plugin {
         const login = player.login;
         this.checkpointCounter[login] = 0;
         if (!this.widgets[login]) {
-            const widget = new Widget("core/plugins/widgets/checkpoints/widget.twig");
+            const widget = new Widget("core/plugins/widgets/checkpoints/widget.xml.twig");
             widget.recipient = login;
-            widget.pos = { x: 0, y: -74 };
+            widget.pos = { x: 0, y: -74, z: 0 };
             widget.size = { width: 20, height: 5 };
             widget.data = {
                 totalCheckpoints: (tmc.maps.currentMap?.NbCheckpoints || 0) - 1,

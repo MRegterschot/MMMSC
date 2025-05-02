@@ -1,9 +1,9 @@
-import { Op } from "sequelize";
+import { Op, QueryTypes, type Sequelize } from "sequelize";
 import MMMPoints from "../../../userdata/schemas/mmmpoints.model";
 import type { Map } from "../../mapmanager";
 import Confirm from "../../ui/confirm";
-import ListWindow from "../../ui/listwindow";
-import { formatTime, escape, clone, removeColors } from "../../utils";
+import ListWindow from "@core/ui/listwindow";
+import { formatTime, htmlEntities, clone, removeColors } from "../../utils";
 import MapLikes from "@core/schemas/maplikes.model";
 
 enum Medals {
@@ -16,17 +16,18 @@ enum Medals {
 
 export default class MapsWindow extends ListWindow {
     params: string[] = [];
-    template: string = "core/plugins/maps/maplist.twig";
-    pageSize = 20;
+    template: string = 'core/plugins/maps/maplist.xml.twig';;
+    pageSize = 32;
     ranks: { [key: string]: { mapUid: string; rank: number; medal: Medals }[] } = {};
 
     constructor(login: string, params: string[]) {
         super(login);
         this.params = params;
+        this.recipient = login;
     }
 
     async uiPaginate(login: string, answer: any, entries: any): Promise<void> {
-        let maps: any[] = [];
+        let maps: any = [];
         let i = 1;
         let serverMaps = clone(tmc.maps.get());
         await this.getPersonalRank(login, serverMaps);
@@ -40,8 +41,8 @@ export default class MapsWindow extends ListWindow {
                 maps.push(
                     Object.assign(map, {
                         Index: i++,
-                        Name: escape(map.Name),
-                        AuthorName: escape(map.AuthorNickname || map.Author || ""),
+                        Name: htmlEntities(map.Name),
+                        AuthorName: htmlEntities(map.AuthorNickname || map.Author || ''),
                         ATime: formatTime(map.AuthorTime || map.GoldTime),
                         MapLikes: mapLikes.percentage,
                         MapLikesTotal: mapLikes.total,
@@ -52,17 +53,40 @@ export default class MapsWindow extends ListWindow {
             }
         }
         this.setItems(maps);
-        super.uiPaginate(login, answer, entries);
+    }
+
+    async onPageItemsUpdate(items: any) {
+        if (items.length == 0) return items;
+        if (items[0]?.Rank) return items;
+        const sequelize: Sequelize = tmc.storage['db'];
+        if (sequelize) {
+            const uids = items.map((val: any) => val.UId);
+            const login = this.recipient;
+            const rankings: any[] = await sequelize.query(
+                `SELECT * FROM (
+                SELECT mapUuid as Uid, login, time, RANK() OVER (PARTITION BY mapUuid ORDER BY time ASC) AS playerRank
+                FROM scores WHERE mapUuid in (?)
+                ) AS t WHERE login = ?`,
+                {
+                    type: QueryTypes.SELECT,
+                    raw: true,
+                    replacements: [uids, login]
+                }
+            );
+            for (const item of items) {
+                const rank =
+                    rankings.find((val) => {
+                        return item.UId == val.Uid;
+                    })?.playerRank || '-';
+                item.Rank = rank;
+            }
+        }
+        return items;
     }
 
     async onAction(login: string, action: string, item: any) {
-        if (action == "Jump") {
-            await tmc.chatCmd.execute(login, "//jump " + item.Uid);
-        } else if (action == "Remove") {
-            const confirm = new Confirm(login, "Confirm Remove", this.applyCommand.bind(this), [login, "//remove " + item.UId]);
-            await confirm.display();
-        } else if (action == "Queue") {
-            await tmc.chatCmd.execute(login, "/addqueue " + item.UId);
+        if (action == 'Queue') {
+            await tmc.chatCmd.execute(login, '/addqueue ' + item.UId);
         }
     }
 

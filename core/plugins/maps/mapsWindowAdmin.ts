@@ -1,7 +1,7 @@
 import MapLikes from '@core/schemas/maplikes.model';
-import Confirm from '../../ui/confirm';
-import ListWindow from '../../ui/listwindow';
-import { formatTime, escape, clone, removeColors } from '../../utils';
+import Confirm from '@core/ui/confirm';
+import ListWindow from '@core/ui/listwindow';
+import { formatTime, htmlEntities, clone, removeColors } from '@core/utils';
 
 export default class MapsWindowAdmin extends ListWindow {
     params: string[] = [];
@@ -21,8 +21,8 @@ export default class MapsWindowAdmin extends ListWindow {
                 maps.push(
                     Object.assign(map, {
                         Index: i++,
-                        Name: escape(map.Name),
-                        AuthorName: escape(map.AuthorNickname || map.Author || ""),
+                        Name: htmlEntities(map.Name),
+                        AuthorName: htmlEntities(map.AuthorNickname || map.Author || ""),
                         ATime: formatTime(map.AuthorTime || map.GoldTime),
                         MapLikes: await this.getMapLikes(map.UId)
                     })
@@ -38,7 +38,7 @@ export default class MapsWindowAdmin extends ListWindow {
             await tmc.chatCmd.execute(login, "//jump " + item.Uid);
         } else if (action == "Remove") {
             const confirm = new Confirm(login, "Confirm Remove", this.applyCommand.bind(this), [login, "//remove " + item.UId]);
-            await confirm.display();    
+            await confirm.display();
         } else if (action == "Queue") {
             await tmc.chatCmd.execute(login, "/addqueue " + item.UId);
         } else if (action == "Purge") {

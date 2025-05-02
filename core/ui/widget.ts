@@ -1,19 +1,20 @@
-import Manialink from './manialink';
+import Manialink, { type MlSize } from './manialink';
+
 
 export default class Widget extends Manialink {
-    size: any = { width: 35, height: 50 };
+    size: MlSize = { width: 32, height: 50 };
 
-    constructor(path: string = "core/ui/widget.twig") {
+    constructor(path: string = "core/templates/widget.xml.twig") {
         super();
-        this.template = path;                
+        this.template = path;
     }
 
-    setOpenAction(action: Function) {
+    setOpenAction(action: CallableFunction) {
         if (this.actions['openWidget'] == undefined) {
             this.actions['openWidget'] = tmc.ui.addAction(action, "");
         }
     }
-    
+
     setOpenActionId(actionId: string) {
         this.actions['openWidget'] = actionId;
     }

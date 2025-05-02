@@ -1,6 +1,7 @@
-import Plugin from "../../../plugins";
-import Widget from '../../../ui/widget';
-import type { Like } from "../../../plugins/maplikes";
+import Plugin from "@core/plugins";
+import Widget from '@core/ui/widget';
+import type { Like } from "@core/plugins/maplikes";
+import MapLikes from "@core/plugins/maplikes";
 import type { Player } from "../../../playermanager";
 
 export default class MapLikesWidget extends Plugin {
@@ -31,9 +32,9 @@ export default class MapLikesWidget extends Plugin {
 
     async actionLike(login: string, value: number) {
         if (value > 0)
-            await tmc.chatCmd.execute(login, "/++")
-        else 
-            await tmc.chatCmd.execute(login, "/--")
+        (tmc.plugins['maplikes'] as MapLikes)?.updateVote(login,1);
+        else
+        (tmc.plugins['maplikes'] as MapLikes)?.updateVote(login,-1);
     }
 
     async onUnload() {
@@ -62,14 +63,16 @@ export default class MapLikesWidget extends Plugin {
         
         if (!widget) {
             widget = new Widget("core/plugins/widgets/maplikes/widget.twig");      
-            widget.pos = { x: 115, y: 60 };   
+            widget.pos = { x: 115, y: 60, z: 10 };   
             widget.recipient = login;
             widget.actions['like'] = tmc.ui.addAction(this.actionLike.bind(this), 1);
             widget.actions['dislike'] = tmc.ui.addAction(this.actionLike.bind(this), -1);
         }
 
         let positive = 0;
+            let negative = 0;
         let total = 0;
+            let wording = "Neutral";
 
         for (const like of this.mapLikes) {
             if (like.vote > 0) {
@@ -79,14 +82,23 @@ export default class MapLikesWidget extends Plugin {
         }
 
         let percentage = "No Votes";
-        
-        if (total > 0) {
-            percentage = ((positive / total * 100).toFixed(0) || 0) + "%";
-        }
+        const percent = positive / total * 100;
+
+            if (percent < 40) wording = "Not Fun";
+            if (percent > 50) wording = "Fun";
+            if (percent > 60) wording = "Super Fun";
+            if (total <= 0) {
+                percentage = "No Votes";
+                wording = "Neutral";
+            }
+
 
         widget.setData({
             percentage: percentage,
             width: (positive / total * 30).toFixed(0),
+            wording: wording,
+            positive: positive,
+            negative: negative,
             mapLike: this.mapLikes.find(like => like.login === login)
         });
 
