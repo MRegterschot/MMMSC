@@ -69,13 +69,9 @@ class log {
     ansiLevel: number = 0;
     constructor() {
         this.ansiLevel = Number.parseInt(process.env.ANSILEVEL || "0");
-        // const path = `${process.cwd()}/userdata/log/`;
-        try {
-            // if (!existsSync(path)) mkdirSync(path);
-        } catch (e:any) {
-            console.log(e.message);
-            process.exit(1);
-        }
+
+        console.log(e.message);
+        process.exit(1);
     }
 
     debug(str: string) {
