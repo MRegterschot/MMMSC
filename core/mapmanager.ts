@@ -86,7 +86,9 @@ class MapManager {
             const res:any = await tmc.server.multicall(out) || [];
 
             for (const map of res) {
-                newMaps[map.UId] = map;
+                if (map) {
+                    newMaps[map.UId] = map;
+                }
             }
         }
         this.maps = newMaps;
